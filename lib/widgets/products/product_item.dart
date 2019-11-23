@@ -3,38 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shop_app/models/product.dart';
-import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/widgets/products/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
 
-  final Product _product;
+//  final Product _product;
 
-  ProductItem(this._product);
+//  ProductItem(this._product);
 
   @override
   Widget build(BuildContext context) {
-
-    final ProductsProvider _provider = Provider.of<ProductsProvider>(context);
-
+    final Product _provider = Provider.of<Product>(context, listen: false);
+    print("aaa");
     return GestureDetector(
       child: GridTile(
         child: CachedNetworkImage(
-          imageUrl: _product.imageUrl,
+          imageUrl: _provider.imageUrl,
           fit: BoxFit.cover,
           placeholder: (context, url){
             return Center(child: CircularProgressIndicator(backgroundColor: Theme.of(context).primaryColorLight));
           },
         ),
         footer: GridTileBar(
-          leading: IconButton(
-            icon: Icon(
-              _product.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Theme.of(context).accentColor
-            ),
-            onPressed: () => _provider.toggleFavorite(_product),
+          leading: Consumer<Product>(
+            builder: (ctx, product, _){
+              return IconButton(
+                icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Theme.of(context).accentColor
+                ),
+                onPressed: () => product.toggleFavorite(),
+              );
+            },
           ),
-          title: Text(_product.title,
+          title: Text(_provider.title,
             style: TextStyle(
               color: Theme.of(context).accentColor,
               fontSize: 16,
@@ -48,7 +50,7 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black87,
         ),
       ),
-      onTap: () => Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: _product.id),
+      onTap: () => Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: _provider.id),
     );
   }
 }

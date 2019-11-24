@@ -9,6 +9,8 @@ import 'package:shop_app/widgets/core/shop_scaffold.dart';
 import 'package:shop_app/widgets/core/widgets/badge.dart';
 import 'package:shop_app/widgets/core/widgets/no_items.dart';
 import 'package:shop_app/widgets/core/widgets/popup_menu.dart';
+import 'package:shop_app/widgets/core/widgets/side_drawer/drawer.dart';
+import 'package:shop_app/widgets/core/widgets/side_drawer/drawer_item.dart';
 import 'package:shop_app/widgets/products/product_item.dart';
 
 enum FilterOptions {
@@ -31,6 +33,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
     return ShopScaffold(
       title: "Products",
+      drawer: SideDrawer(),
       actions: [
         PopupMenu(
           items: [

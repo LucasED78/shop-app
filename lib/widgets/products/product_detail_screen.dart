@@ -75,7 +75,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10,),
                 FlatButton(
-                  child: Text("Add to cart", style: Theme.of(context).textTheme.button,),
+                  child: Text("Add to cart", style: TextStyle(color: Theme.of(context).accentColor),),
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     side: BorderSide(color: Theme.of(context).primaryColor)

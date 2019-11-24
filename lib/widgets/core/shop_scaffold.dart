@@ -7,7 +7,7 @@ class ShopScaffold extends StatelessWidget {
 
   final String title;
   final Widget body;
-  final Drawer drawer;
+  final Widget drawer;
   final List<Widget> actions;
   final bool noPadding;
 

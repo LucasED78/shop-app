@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/widgets/cart/CartScreen.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
+import 'package:shop_app/widgets/core/widgets/badge.dart';
 import 'package:shop_app/widgets/core/widgets/popup_menu.dart';
 import 'package:shop_app/widgets/products/product_item.dart';
 
@@ -24,7 +27,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     final ProductsProvider _provider = Provider.of<ProductsProvider>(context);
     List<Product> _products = _onlyFavorites ? _provider.favorites : _provider.products;
-    
+
     return ShopScaffold(
       title: "Products",
       actions: [
@@ -45,6 +48,19 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               else _onlyFavorites = false;
             });
           },
+        ),
+        Consumer<CartProvider>(
+          builder: (context, cart, ch){
+            return Badge(
+              value: cart.itemsCount.toString(),
+              color: Colors.black,
+              child: ch,
+            );
+          },
+          child: IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () => Navigator.of(context).pushNamed(CartScreen.routeName),
+          ),
         )
       ],
       body: GridView.builder(

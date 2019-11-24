@@ -9,12 +9,14 @@ class ShopScaffold extends StatelessWidget {
   final Widget body;
   final Drawer drawer;
   final List<Widget> actions;
+  final bool noPadding;
 
   const ShopScaffold({
     @required this.title,
     @required this.body,
     this.drawer,
-    this.actions
+    this.actions,
+    this.noPadding = false
   });
 
   @override
@@ -26,7 +28,10 @@ class ShopScaffold extends StatelessWidget {
         actions: actions != null ? actions : [],
       ),
       drawer: drawer,
-      body: body,
+      body: !noPadding ? Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: body,
+      ) : body,
     );
   }
 }

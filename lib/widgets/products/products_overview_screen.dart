@@ -7,6 +7,7 @@ import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/widgets/cart/CartScreen.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
 import 'package:shop_app/widgets/core/widgets/badge.dart';
+import 'package:shop_app/widgets/core/widgets/no_items.dart';
 import 'package:shop_app/widgets/core/widgets/popup_menu.dart';
 import 'package:shop_app/widgets/products/product_item.dart';
 
@@ -63,7 +64,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         )
       ],
-      body: GridView.builder(
+      body: _products.isEmpty ? NoItems(
+        "No products encountered"
+      ) : GridView.builder(
         itemCount: _products.length,
         itemBuilder: (context, index) => ChangeNotifierProvider.value(
           value: _products[index],

@@ -31,8 +31,8 @@ class CartItem extends StatelessWidget {
             _removedCartItem.putIfAbsent(productId, () => _cartItem);
 
             Snack.showSnackBar(context, CustomSnackBar(
-              content: "Produto removido do carrinho",
-              label: "DESFAZER",
+              content: "product removed from cart",
+              label: "undo",
               onPressed: (){
                 cart.addItem(productId, _cartItem.title, _cartItem.imageUrl, _cartItem.price);
               },

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:shop_app/models/product.dart';
 import 'package:shop_app/providers/cart_provider.dart';
+import 'package:shop_app/widgets/core/widgets/snackbar.dart';
 import 'package:shop_app/widgets/products/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
@@ -47,7 +48,16 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart, color: Theme.of(context).accentColor,),
-            onPressed: () => _cartProvider.addItem(_provider.id, _provider.title, _provider.imageUrl, _provider.price),
+            onPressed: () {
+              String productId = _provider.id;
+              _cartProvider.addItem(_provider.id, _provider.title, _provider.imageUrl, _provider.price);
+
+              Snack.showSnackBar(context, CustomSnackBar(
+                content: "product added on cart",
+                label: "undo",
+                onPressed: () => _cartProvider.removeItem(productId)
+              ).snackBar);
+            },
           ),
           backgroundColor: Colors.black87,
         ),

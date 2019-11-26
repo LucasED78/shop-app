@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/widgets/core/widgets/side_drawer/drawer_header.dart' as shop;
 import 'package:shop_app/widgets/core/widgets/side_drawer/drawer_item.dart';
+import 'package:shop_app/widgets/order/order_screen.dart';
 
 class SideDrawer extends StatelessWidget {
 
@@ -14,9 +15,14 @@ class SideDrawer extends StatelessWidget {
             icon: Icons.ac_unit,
           ),
           DrawerItem(
+            title: "Shop",
+            icon: Icons.shop,
+            onTap: () => Navigator.of(context).pushReplacementNamed("/"),
+          ),
+          DrawerItem(
             title: "Orders",
-            icon: Icons.add_shopping_cart,
-            onTap: () => {},
+            icon: Icons.payment,
+            onTap: () => Navigator.of(context).pushReplacementNamed(OrderScreen.routeName),
           )
         ],
       ),

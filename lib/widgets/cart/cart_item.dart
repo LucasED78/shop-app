@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/cart.dart';
 import 'package:shop_app/providers/cart_provider.dart';
+import 'package:shop_app/widgets/core/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/core/widgets/product_tile.dart';
 import 'package:shop_app/widgets/core/widgets/snackbar.dart';
 
@@ -38,6 +39,18 @@ class CartItem extends StatelessWidget {
                 cart.addItem(productId, _cartItem.title, _cartItem.imageUrl, _cartItem.price);
               },
             ).snackBar);
+          },
+          confirmDismiss: (_){
+            return showDialog(
+              context: context,
+              builder: (ctx){
+                return ConfirmAlertDialog(
+                  title: "Are you sure?",
+                  content: "Do you really want to remove this item?",
+                  context: ctx,
+                );
+              }
+            );
           },
         );
       },

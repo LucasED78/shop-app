@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Snack {
   static showSnackBar(BuildContext context, SnackBar snackBar) {
+    Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(snackBar);
   }
 }

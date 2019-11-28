@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/utils/form_validator.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
 
 class EditUserProduct extends StatefulWidget {
@@ -67,10 +68,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocusNode),
-                validator: (value) {
-                  if (value.isEmpty) return "Please provide a value.";
-                  else return null;
-                },
+                validator: (value) => FormValidator(value).validInput,
                 onSaved: (value) => _product.title = value,
               ),
               TextFormField(
@@ -81,6 +79,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 keyboardType: TextInputType.number,
                 focusNode: _priceFocusNode,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocusNode),
+                validator: (value) => FormValidator(value).validPrice,
                 onSaved: (value) => _product.price = double.parse(value),
               ),
               TextFormField(
@@ -88,6 +87,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                validator: (value) =>  FormValidator(value).validDescription,
                 onSaved: (value) => _product.description = value,
               ),
               TextFormField(
@@ -95,6 +95,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 keyboardType: TextInputType.url,
                 focusNode: _imageFocusNode,
                 controller: _imageController,
+                validator: (value) => FormValidator(value).validImageURL,
                 onSaved: (value) => _product.imageUrl = value,
                 onFieldSubmitted: (_) => _submitForm(),
               )

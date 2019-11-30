@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/loading_provider.dart';
+import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/utils/form_validator.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
 
@@ -18,13 +21,30 @@ class _EditUserProductState extends State<EditUserProduct> {
   final FocusNode _imageFocusNode = FocusNode();
   final TextEditingController _imageController = TextEditingController();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  Product _product = Product(id: DateTime.now().toString());
+  Product _product = Product();
+  bool _productLoaded = false;
+  LoadingProvider _loadingProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _imageFocusNode.addListener(_displayImageUrl);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (!_productLoaded) {
+      final String productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _product = Provider.of<ProductsProvider>(context, listen: false).findByID(productId);
+        _imageController.text = _product.imageUrl;
+      }
+    }
+
+    _productLoaded = true;
   }
 
   @override
@@ -39,6 +59,8 @@ class _EditUserProductState extends State<EditUserProduct> {
 
   @override
   Widget build(BuildContext context) {
+    _loadingProvider = Provider.of<LoadingProvider>(context);
+
     return ShopScaffold(
       title: "Edit product",
       actions: <Widget>[
@@ -47,7 +69,8 @@ class _EditUserProductState extends State<EditUserProduct> {
           onPressed: _submitForm,
         )
       ],
-      body: Padding(
+      body: _loadingProvider.loading ? Center(child: CircularProgressIndicator(),)
+          : Padding(
         padding: EdgeInsets.all(16),
         child: Form(
           key: _form,
@@ -63,6 +86,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 ),
               ),
               TextFormField(
+                initialValue: _product.title ?? 'a',
                 decoration: InputDecoration(
                     labelText: "title"
                 ),
@@ -72,6 +96,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 onSaved: (value) => _product.title = value,
               ),
               TextFormField(
+                initialValue: _product.price.toString() ?? '0',
                 decoration: InputDecoration(
                     labelText: "price"
                 ),
@@ -83,6 +108,7 @@ class _EditUserProductState extends State<EditUserProduct> {
                 onSaved: (value) => _product.price = double.parse(value),
               ),
               TextFormField(
+                initialValue: _product.description ?? '',
                 decoration: InputDecoration(labelText: "description"),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
@@ -114,12 +140,20 @@ class _EditUserProductState extends State<EditUserProduct> {
     }
   }
 
-  void _submitForm(){
+  void _submitForm() async{
     final bool isValid = _form.currentState.validate();
 
     if (!isValid) return;
 
     _form.currentState.save();
-    print(_product.title);
+    if (_product.id != null) {
+      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_product);
+    }
+    else {
+      _loadingProvider.loading = true;
+      await Provider.of<ProductsProvider>(context, listen: false).addProduct(_product);
+      _loadingProvider.loading = false;
+      Navigator.of(context).pop();
+    }
   }
 }

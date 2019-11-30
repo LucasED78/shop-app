@@ -21,4 +21,18 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
   }
+
+  Map<String, dynamic> toJSON () {
+    final productJSON = {
+      "title": title,
+      "description": description,
+      "price": price,
+      "imageUrl": imageUrl,
+      "isFavorite": isFavorite
+    };
+
+    if (id != null) productJSON['id'] = id;
+
+    return productJSON;
+  }
 }

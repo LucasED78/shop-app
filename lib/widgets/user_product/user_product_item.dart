@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/widgets/core/widgets/snackbar.dart';
+import 'package:shop_app/widgets/user_product/edit_user_product.dart';
 
 class UserProductItem extends StatelessWidget {
 
@@ -26,12 +30,27 @@ class UserProductItem extends StatelessWidget {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onPressed: () => {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(EditUserProduct.routeName, arguments: _product.id);
+                    },
                   ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => {},
-                  )
+                  Consumer<ProductsProvider>(
+                    builder: (ctx, provider, _){
+                      return IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          final Product _deletedProduct = _product;
+                          provider.removeProduct(_product.id);
+
+                          Snack.showSnackBar(context, CustomSnackBar(
+                            content: "${_deletedProduct.title} successsfully removed!",
+                            label: "undo",
+                            onPressed: () => provider.addProduct(_deletedProduct)
+                          ).snackBar);
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

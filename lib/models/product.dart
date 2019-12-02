@@ -35,4 +35,15 @@ class Product with ChangeNotifier {
 
     return productJSON;
   }
+
+  factory Product.fromJSON(dynamic data){
+    return Product(
+      id: data['id'],
+      title: data['title'],
+      description: data['title'],
+      price: data['price'],
+      imageUrl: data['imageUrl'],
+      isFavorite: data['isFavorite']
+    );
+  }
 }

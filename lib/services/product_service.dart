@@ -12,4 +12,10 @@ class ProductService {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> fetchProduct() async{
+    Response response = await Dio().get("${CONSTANTS.URL}/products.json");
+    
+    return response.data;
+  }
+
 }

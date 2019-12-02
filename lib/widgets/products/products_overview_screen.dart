@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 
 import 'package:shop_app/models/product.dart';
 import 'package:shop_app/providers/cart_provider.dart';
+import 'package:shop_app/providers/loading_provider.dart';
 import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/utils/async_utils.dart';
 import 'package:shop_app/widgets/cart/CartScreen.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
 import 'package:shop_app/widgets/core/widgets/badge.dart';
 import 'package:shop_app/widgets/core/widgets/no_items.dart';
 import 'package:shop_app/widgets/core/widgets/popup_menu.dart';
 import 'package:shop_app/widgets/core/widgets/side_drawer/drawer.dart';
-import 'package:shop_app/widgets/core/widgets/side_drawer/drawer_item.dart';
 import 'package:shop_app/widgets/products/product_item.dart';
 
 enum FilterOptions {
@@ -24,7 +25,21 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  LoadingProvider _loadingProvider;
   bool _onlyFavorites = false;
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AsyncUtils.delayState((){
+      _loadingProvider = Provider.of<LoadingProvider>(context);
+
+      _loadingProvider.loading = true;
+      Provider.of<ProductsProvider>(context).fetchProducts()
+        .then((_) => _loadingProvider.loading = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +88,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         itemCount: _products.length,
         itemBuilder: (context, index) => ChangeNotifierProvider.value(
           value: _products[index],
-          child: ProductItem(),
+          child: _loadingProvider.loading ? Center(child: CircularProgressIndicator()) : ProductItem(),
         ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

@@ -18,4 +18,8 @@ class ProductService {
     return response.data;
   }
 
+  Future<void> updateProduct(Product product) async {
+    return await Dio().patch("${CONSTANTS.URL}/products/${product.id}.json", data: product.toJSON());
+  }
+
 }

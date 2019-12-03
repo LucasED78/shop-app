@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/loading_provider.dart';
 import 'package:shop_app/services/product_service.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -19,10 +21,15 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(BuildContext context, Product product) async{
    final int productIndex = _products.indexWhere((p) => p.id == product.id);
 
-   if (productIndex > 0) _products[productIndex] = product;
+   if (productIndex != -1) {
+     Provider.of<LoadingProvider>(context).loading = true;
+     await ProductService().updateProduct(product);
+     _products[productIndex] = product;
+     Provider.of<LoadingProvider>(context).loading = false;
+   }
   }
 
   void removeProduct(String id){
@@ -30,7 +37,8 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchProducts() async{
+  Future<void> fetchProducts(BuildContext context) async{
+    Provider.of<LoadingProvider>(context).loading = true;
     final data = await ProductService().fetchProduct();
     final List<Product> loadedProducts = [];
 
@@ -41,5 +49,7 @@ class ProductsProvider with ChangeNotifier {
     _products = loadedProducts;
 
     notifyListeners();
+
+    Provider.of<LoadingProvider>(context).loading = false;
   }
 }

@@ -9,6 +9,7 @@ import 'package:shop_app/utils/async_utils.dart';
 import 'package:shop_app/widgets/cart/CartScreen.dart';
 import 'package:shop_app/widgets/core/shop_scaffold.dart';
 import 'package:shop_app/widgets/core/widgets/badge.dart';
+import 'package:shop_app/widgets/core/widgets/color.dart';
 import 'package:shop_app/widgets/core/widgets/no_items.dart';
 import 'package:shop_app/widgets/core/widgets/popup_menu.dart';
 import 'package:shop_app/widgets/core/widgets/side_drawer/drawer.dart';
@@ -25,25 +26,24 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  LoadingProvider _loadingProvider;
   bool _onlyFavorites = false;
-  
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    AsyncUtils.delayState((){
-      _loadingProvider = Provider.of<LoadingProvider>(context);
 
-      _loadingProvider.loading = true;
-      Provider.of<ProductsProvider>(context).fetchProducts()
-        .then((_) => _loadingProvider.loading = false);
+    AsyncUtils.delayState()
+      .then((_){
+        Provider.of<ProductsProvider>(context).fetchProducts(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print("build overview");
     final ProductsProvider _provider = Provider.of<ProductsProvider>(context);
+    final LoadingProvider _loadingProvider = Provider.of<LoadingProvider>(context);
     List<Product> _products = _onlyFavorites ? _provider.favorites : _provider.products;
 
     return ShopScaffold(
@@ -82,13 +82,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         )
       ],
-      body: _products.isEmpty ? NoItems(
-        "No products encountered"
-      ) : GridView.builder(
+      body: _loadingProvider.loading ? Loading() : GridView.builder(
         itemCount: _products.length,
         itemBuilder: (context, index) => ChangeNotifierProvider.value(
           value: _products[index],
-          child: _loadingProvider.loading ? Center(child: CircularProgressIndicator()) : ProductItem(),
+          child: _products.isEmpty ? NoItems(
+            "No products encountered"
+          ) : ProductItem(),
         ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

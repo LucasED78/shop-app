@@ -40,7 +40,7 @@ class Product with ChangeNotifier {
     return Product(
       id: data['id'],
       title: data['title'],
-      description: data['title'],
+      description: data['description'],
       price: data['price'],
       imageUrl: data['imageUrl'],
       isFavorite: data['isFavorite']

@@ -147,13 +147,12 @@ class _EditUserProductState extends State<EditUserProduct> {
 
     _form.currentState.save();
     if (_product.id != null) {
-      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_product);
+      await Provider.of<ProductsProvider>(context, listen: false).updateProduct(context, _product);
     }
     else {
-      _loadingProvider.loading = true;
       await Provider.of<ProductsProvider>(context, listen: false).addProduct(_product);
-      _loadingProvider.loading = false;
-      Navigator.of(context).pop();
     }
+
+    Navigator.of(context).pop();
   }
 }

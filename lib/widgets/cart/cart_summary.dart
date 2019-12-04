@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart_provider.dart';
+import 'package:shop_app/providers/loading_provider.dart';
 import 'package:shop_app/providers/order_provider.dart';
+import 'package:shop_app/widgets/core/widgets/color.dart';
 
 class CartSummary extends StatelessWidget {
 
@@ -44,12 +46,13 @@ class CartSummary extends StatelessWidget {
             const SizedBox(height: 10,),
             Consumer<OrderProvider>(
               builder: (_, order, child){
-                return RaisedButton(
+                return Provider.of<LoadingProvider>(context).loading ? Loading() :
+                RaisedButton(
                   padding: EdgeInsets.symmetric(vertical: 15),
                   color: Theme.of(context).primaryColor,
                   child: Text("Buy now", style: Theme.of(context).textTheme.button,),
-                  onPressed: () {
-                    order.addOrder(_cartProvider.items.values.toList(), _cartProvider.totalAmount);
+                  onPressed: () async{
+                    await order.addOrder(context, _cartProvider.items.values.toList(), _cartProvider.totalAmount);
                     _cartProvider.clear();
                   }
                 );

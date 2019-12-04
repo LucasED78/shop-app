@@ -32,9 +32,20 @@ class ProductsProvider with ChangeNotifier {
    }
   }
 
-  void removeProduct(String id){
-    _products.removeWhere((product) => product.id == id);
+  removeProduct(String id) {
+    int prodIndex = _products.indexWhere((p) => p.id == id);
+    Product deletedProduct = _products[prodIndex];
+    _products.removeAt(prodIndex);
     notifyListeners();
+
+    ProductService().deleteProduct(id)
+      .then((_) => deletedProduct = null)
+      .catchError((e){
+        print(e);
+        _products.insert(prodIndex, deletedProduct);
+        notifyListeners();
+    });
+
   }
 
   Future<void> fetchProducts(BuildContext context) async{

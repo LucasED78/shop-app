@@ -22,4 +22,8 @@ class ProductService {
     return await Dio().patch("${CONSTANTS.URL}/products/${product.id}.json", data: product.toJSON());
   }
 
+  Future<void> deleteProduct(String id) async {
+    return await Dio().delete("${CONSTANTS.URL}/products/$id.json");
+  }
+
 }

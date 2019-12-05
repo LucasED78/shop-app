@@ -26,4 +26,18 @@ class OrderProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future fetchOrder() async{
+    final data = await OrderService().fetchOrder();
+
+    List<Order> orders = [];
+
+    data.forEach((k,v){
+      orders.add(Order.fromJSON({ "id": k, ...v }));
+    });
+
+    _orders = orders;
+
+    return _orders;
+  }
 }

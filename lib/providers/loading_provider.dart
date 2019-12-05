@@ -5,6 +5,7 @@ class LoadingProvider with ChangeNotifier {
 
   set loading (bool loading){
     _loading = loading;
+    print(_loading);
     notifyListeners();
   }
 

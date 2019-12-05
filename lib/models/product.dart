@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/providers/loading_provider.dart';
+import 'package:shop_app/services/product_service.dart';
+import 'package:shop_app/widgets/products/product_item.dart';
 
 class Product with ChangeNotifier {
   String id;
@@ -17,9 +21,16 @@ class Product with ChangeNotifier {
     this.isFavorite = false
   });
 
-  void toggleFavorite(){
+  void toggleFavorite(BuildContext context) async{
+    bool cachedFavorite = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
+
+    await ProductService().updateProduct(this)
+      .catchError((_) {
+        isFavorite = cachedFavorite;
+        notifyListeners();
+    });
   }
 
   Map<String, dynamic> toJSON () {

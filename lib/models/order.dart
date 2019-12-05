@@ -29,7 +29,7 @@ class Order {
     return Order(
       id: data['id'],
       amount: data['amount'],
-      products: [],
+      products: data['products'].map<Cart>((c) => Cart.fromJSON(c)).toList(),
       orderedAt: DateTime.parse(data['orderedAt'])
     );
   }

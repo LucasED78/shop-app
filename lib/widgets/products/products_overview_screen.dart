@@ -43,7 +43,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     print("build overview");
     final ProductsProvider _provider = Provider.of<ProductsProvider>(context);
-    final LoadingProvider _loadingProvider = Provider.of<LoadingProvider>(context);
+    final LoadingProvider _loadingProvider = Provider.of<LoadingProvider>(context );
     List<Product> _products = _onlyFavorites ? _provider.favorites : _provider.products;
 
     return ShopScaffold(

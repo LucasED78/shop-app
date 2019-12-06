@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/auth_provider.dart';
 import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/providers/error_provider.dart';
 import 'package:shop_app/providers/loading_provider.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           value: LoadingProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: ErrorProvider(),
+          value: AuthProvider(),
         )
       ],
       child: MaterialApp(
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
           accentColor: Colors.indigoAccent,
+//          hintColor: Theme.of(context).primaryColor,
           fontFamily: "Lato",
           textTheme: TextTheme(
             button: TextStyle(

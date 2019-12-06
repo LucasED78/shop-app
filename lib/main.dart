@@ -5,6 +5,7 @@ import 'package:shop_app/providers/error_provider.dart';
 import 'package:shop_app/providers/loading_provider.dart';
 import 'package:shop_app/providers/order_provider.dart';
 import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/widgets/auth/auth_screen.dart';
 import 'package:shop_app/widgets/cart/CartScreen.dart';
 import 'package:shop_app/widgets/order/order_screen.dart';
 import 'package:shop_app/widgets/products/product_detail_screen.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailScreen.routeName: (_) => ProductDetailScreen(),
           CartScreen.routeName: (_) => CartScreen(),

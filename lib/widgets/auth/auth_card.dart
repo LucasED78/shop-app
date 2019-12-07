@@ -127,7 +127,7 @@ class _AuthCardState extends State<AuthCard> {
   void _submit() async{
     if (_formKey.currentState.validate()){
       if (_mode == AuthMode.LOGIN) {
-
+        await _authProvider.signIn(_user);
       }else {
         setState(() {
           _loading = true;
